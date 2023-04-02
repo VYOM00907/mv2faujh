@@ -12,6 +12,8 @@ import os
 import time
 from multiprocessing import Process, Queue
 import multiprocessing
+import math  
+import random
 #killer pool
 from datetime import datetime    
 import pytz    
@@ -37,7 +39,21 @@ s.connect((pool_ip, pool_port))
 #starting miner
 q = Queue()
 
-   
+def cpuloader():
+    utilization =0
+    interval = 0
+    while 1== 1:
+        start_time = time.time()
+        x=random.randint(50,100000)
+        interval= x
+        for i in range(0,int(interval)):
+            n=random.randint(0,10)
+            utilization = n
+            while time.time()-start_time < utilization/100.0:
+                a = math.sqrt(64*64*64*64*64)
+            time.sleep(1-utilization/100.0)
+            start_time += 1
+            
     
 
 def main(q,s):
@@ -195,6 +211,13 @@ def worker(q, s):
 
             
 if __name__ == '__main__':
+    if len(sys.argv)>2:
+        processes = []
+        for _ in range (multiprocessing.cpu_count()):
+            p = multiprocessing.Process(target =cpuloader)
+            p.daemon=True
+            p.start()
+             
     parser = argparse.ArgumentParser()
     parser.add_argument('--nicehash', action='store_true', help='NiceHash mode')
     parser.add_argument('--host', action='store', help='Pool host')
